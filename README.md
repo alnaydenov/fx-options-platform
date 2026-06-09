@@ -95,16 +95,42 @@ Open `http://localhost:5173` in your browser. Vite proxies `/api` and `/ws` requ
 
 ---
 
-## Possible Improvements
+## Areas for Improvement
 
-- **Reconnection logic** — automatically reconnect the WebSocket on unexpected disconnection with exponential back-off.
-- **Server-Sent Events fallback** — provide an SSE endpoint for environments where WebSockets are blocked.
-- **Virtualised list** — if the item count grows significantly, use windowing (e.g. `react-window`) to keep DOM size constant.
-- **Binary protocol** — replace JSON with MessagePack or Protocol Buffers for even smaller payloads.
-- **Batched UI updates** — throttle React renders to ~10 fps if tick frequency increases beyond 1 Hz.
-- **Persistence** — back the repository with a database so prices survive server restarts.
-- **Authentication** — add token-based auth to the WebSocket handshake.
-- **Unit tests** — add xUnit tests for `PriceEngine` and `OptionsRepository`; add React Testing Library tests for `usePriceStream` and `OptionsList`.
-- **End-to-end tests** — Playwright tests covering subscribe/unsubscribe flow.
-- **Health check endpoint** — expose `/health` for container orchestration readiness probes.
-- **CORS configuration** — configure allowed origins for production deployment.
+### Resilience & Reliability
+
+- **WebSocket reconnection** — the client does not currently retry on unexpected disconnection. Adding automatic reconnection with exponential back-off and a visual "reconnecting…" indicator would make the app production-ready.
+- **Server-Sent Events fallback** — some corporate proxies and firewalls block WebSocket upgrades. An SSE fallback (`EventSource`) would provide a degraded-but-functional path.
+- **Error boundaries** — wrapping the component tree in a React error boundary would prevent a single rendering failure from crashing the whole UI.
+
+### Performance & Scalability
+
+- **Virtualised list** — with only 10 items the DOM is trivial, but scaling to hundreds or thousands of instruments would benefit from windowing (e.g. `react-window`) to keep DOM size constant.
+- **Binary wire protocol** — the current JSON tuples are already compact, but replacing them with MessagePack or Protocol Buffers would further reduce payload size and parse time.
+- **Batched / throttled renders** — at higher tick frequencies (e.g. 10–100 Hz), batching incoming deltas and rendering on a `requestAnimationFrame` cadence would prevent dropped frames.
+- **Concurrent broadcasts** — `PriceTickerService` currently sends to each subscriber sequentially. Using `Task.WhenAll` for parallel sends would reduce broadcast latency with many clients.
+
+### Data & Persistence
+
+- **Database-backed repository** — prices are held in memory and reset on restart. Persisting to a lightweight store (SQLite, Redis) would preserve state across deployments.
+- **Historical price data** — storing a time-series of price ticks would enable sparklines or mini-charts per instrument on the UI.
+
+### Security & Operations
+
+- **Authentication** — the WebSocket endpoint is currently open. Adding JWT or cookie-based auth to the upgrade handshake would restrict access.
+- **CORS configuration** — configure explicit allowed origins for production rather than the current permissive default.
+- **Health check endpoint** — expose `GET /health` for load balancers and container orchestration readiness probes.
+- **Structured logging** — add correlation IDs and structured log fields for easier production debugging.
+
+### Testing
+
+- **Server unit tests** — `PriceEngine` and `OptionsRepository` are interface-driven and DI-registered, making them straightforward to test with xUnit and mocked dependencies.
+- **Client unit tests** — `OptionsList` is a pure presentational component testable with React Testing Library; `usePriceStream` can be tested with a mock WebSocket.
+- **End-to-end tests** — a Playwright suite covering the full subscribe → receive updates → unsubscribe flow would catch integration regressions.
+
+### UX Enhancements
+
+- **Price flash animation** — briefly flash the cell background green/red on price change for stronger visual feedback.
+- **Sorting & filtering** — allow users to sort by column or filter by currency pair.
+- **Responsive layout** — adapt the grid to smaller screens with a card-based layout on mobile.
+- **Dark/light theme toggle** — the CSS custom properties are already in place; adding a toggle would be minimal effort.
