@@ -65,7 +65,11 @@ export function usePriceStream(
       wsRef.current = null;
     }
     setSubscribed(false);
-  }, []);
+    // Reset all direction indicators when unsubscribed
+    setItems((prev) =>
+      prev.map((item) => ({ ...item, direction: 'same' as PriceDirection }))
+    );
+  }, [setItems]);
 
   return { subscribed, subscribe, unsubscribe };
 }
