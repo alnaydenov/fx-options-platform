@@ -15,7 +15,7 @@ A real-time FX options pricing dashboard built with **React + TypeScript** on th
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/fx-options-platform.git
+git clone https://github.com/alnaydenov/fx-options-platform.git
 cd fx-options-platform
 ```
 
