@@ -25,9 +25,16 @@ export function usePriceStream(
     ws.onmessage = (event) => {
       const deltas: PriceDeltaTuple[] = JSON.parse(event.data);
 
-      setItems((prev) => {
-        const updated = prev.map((item) => {
-          const delta = deltas.find((d) => d[0] === item.id);
+      // Build a lookup map for O(1) access — avoids O(n*m) on each tick
+      const deltaMap = new Map<number, PriceDeltaTuple>();
+      for (const d of deltas) {
+        deltaMap.set(d[0], d);
+      }
+
+      // Merge deltas into existing items, preserving original array order
+      setItems((prev) =>
+        prev.map((item) => {
+          const delta = deltaMap.get(item.id);
           if (!delta) return { ...item, direction: 'same' as PriceDirection };
 
           const [, newPrice, timestamp] = delta;
@@ -45,9 +52,8 @@ export function usePriceStream(
             updatedAt: timestamp,
             direction,
           };
-        });
-        return updated;
-      });
+        })
+      );
     };
 
     ws.onopen = () => setSubscribed(true);
