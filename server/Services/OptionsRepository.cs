@@ -24,6 +24,15 @@ public class OptionsRepository : IOptionsRepository
         }) ?? new List<FxOption>();
     }
 
+    /// <summary>
+    /// Test-friendly constructor — accepts seed data directly, bypassing filesystem access.
+    /// Accessible to test projects via InternalsVisibleTo.
+    /// </summary>
+    internal OptionsRepository(IEnumerable<FxOption> seedData)
+    {
+        _items = seedData.ToList();
+    }
+
     public IReadOnlyList<FxOption> GetAll()
     {
         lock (_lock)

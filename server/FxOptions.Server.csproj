@@ -10,4 +10,8 @@
     <None Update="Data/items.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="FxOptions.Server.Tests" />
+  </ItemGroup>
+
 </Project>

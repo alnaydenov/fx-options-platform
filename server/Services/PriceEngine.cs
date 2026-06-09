@@ -10,11 +10,17 @@ public interface IPriceEngine
 public class PriceEngine : IPriceEngine
 {
     private readonly IOptionsRepository _repository;
-    private readonly Random _random = new();
+    private readonly Random _random;
 
-    public PriceEngine(IOptionsRepository repository)
+    public PriceEngine(IOptionsRepository repository) : this(repository, new Random()) { }
+
+    /// <summary>
+    /// Test-friendly constructor — accepts a seeded Random for deterministic price generation.
+    /// </summary>
+    public PriceEngine(IOptionsRepository repository, Random random)
     {
         _repository = repository;
+        _random = random;
     }
 
     public IReadOnlyList<PriceDelta> GenerateTick()

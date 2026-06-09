@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -9,25 +8,19 @@ namespace FxOptions.Server.Services;
 public class PriceTickerService : BackgroundService
 {
     private const int TickIntervalMs = 1000; // 1 second tick interval
-    
-    private readonly IPriceEngine _priceEngine;
-    private readonly ILogger<PriceTickerService> _logger;
-    private static readonly ConcurrentDictionary<string, WebSocket> _subscribers = new();
 
-    public PriceTickerService(IPriceEngine priceEngine, ILogger<PriceTickerService> logger)
+    private readonly IPriceEngine _priceEngine;
+    private readonly ISubscriberManager _subscribers;
+    private readonly ILogger<PriceTickerService> _logger;
+
+    public PriceTickerService(
+        IPriceEngine priceEngine,
+        ISubscriberManager subscribers,
+        ILogger<PriceTickerService> logger)
     {
         _priceEngine = priceEngine;
+        _subscribers = subscribers;
         _logger = logger;
-    }
-
-    public static void AddSubscriber(string id, WebSocket socket)
-    {
-        _subscribers.TryAdd(id, socket);
-    }
-
-    public static void RemoveSubscriber(string id)
-    {
-        _subscribers.TryRemove(id, out _);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -38,7 +31,7 @@ public class PriceTickerService : BackgroundService
         {
             await Task.Delay(TickIntervalMs, stoppingToken);
 
-            if (_subscribers.IsEmpty) continue;
+            if (!_subscribers.HasSubscribers) continue;
 
             var deltas = _priceEngine.GenerateTick();
             if (deltas.Count == 0) continue;
@@ -50,7 +43,7 @@ public class PriceTickerService : BackgroundService
 
             var deadSockets = new List<string>();
 
-            foreach (var (id, socket) in _subscribers)
+            foreach (var (id, socket) in _subscribers.GetAll())
             {
                 if (socket.State == WebSocketState.Open)
                 {
@@ -71,7 +64,7 @@ public class PriceTickerService : BackgroundService
 
             foreach (var id in deadSockets)
             {
-                RemoveSubscriber(id);
+                _subscribers.Remove(id);
             }
         }
     }
