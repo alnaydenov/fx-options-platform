@@ -8,6 +8,8 @@ namespace FxOptions.Server.Services;
 
 public class PriceTickerService : BackgroundService
 {
+    private const int TickIntervalMs = 1000; // 1 second tick interval
+    
     private readonly IPriceEngine _priceEngine;
     private readonly ILogger<PriceTickerService> _logger;
     private static readonly ConcurrentDictionary<string, WebSocket> _subscribers = new();
@@ -34,7 +36,7 @@ public class PriceTickerService : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(TickIntervalMs, stoppingToken);
 
             if (_subscribers.IsEmpty) continue;
 
