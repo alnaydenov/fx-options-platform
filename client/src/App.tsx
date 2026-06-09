@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { FxOptionDisplay, FxOptionItem } from './types';
 import { OptionsList } from './components/OptionsList';
+import { usePriceStream } from './hooks/usePriceStream';
 import './App.css';
 
 function App() {
   const [items, setItems] = useState<FxOptionDisplay[]>([]);
   const [loading, setLoading] = useState(true);
-  const [subscribed, setSubscribed] = useState(false);
+  const { subscribed, subscribe, unsubscribe } = usePriceStream(items, setItems);
 
   useEffect(() => {
     fetch('/api/options')
@@ -21,14 +22,6 @@ function App() {
       });
   }, []);
 
-  const handleSubscribe = () => {
-    setSubscribed(true);
-  };
-
-  const handleUnsubscribe = () => {
-    setSubscribed(false);
-  };
-
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -40,14 +33,14 @@ function App() {
         <div className="controls">
           <button
             className="btn btn--subscribe"
-            onClick={handleSubscribe}
+            onClick={subscribe}
             disabled={subscribed}
           >
             Subscribe
           </button>
           <button
             className="btn btn--unsubscribe"
-            onClick={handleUnsubscribe}
+            onClick={unsubscribe}
             disabled={!subscribed}
           >
             Unsubscribe
