@@ -8,7 +8,7 @@
 
 .options-header {
   display: grid;
-  grid-template-columns: 60px 1fr 120px 140px;
+  grid-template-columns: 60px 1fr 120px 50px 140px;
   padding: 0.75rem 1rem;
   background: var(--bg-secondary);
   font-size: 0.75rem;
@@ -21,7 +21,7 @@
 
 .options-row {
   display: grid;
-  grid-template-columns: 60px 1fr 120px 140px;
+  grid-template-columns: 60px 1fr 120px 50px 140px;
   padding: 0.6rem 1rem;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.9rem;

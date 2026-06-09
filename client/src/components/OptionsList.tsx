@@ -12,14 +12,20 @@ export function OptionsList({ items }: OptionsListProps) {
         <span className="col col-id">ID</span>
         <span className="col col-name">Name</span>
         <span className="col col-price">Price</span>
+        <span className="col col-direction">Δ</span>
         <span className="col col-updated">Updated</span>
       </div>
       {items.map((item) => (
         <div key={item.id} className="options-row">
           <span className="col col-id">{item.id}</span>
           <span className="col col-name">{item.name}</span>
-          <span className="col col-price">
+          <span className={`col col-price price--${item.direction}`}>
             {item.price.toFixed(4)}
+          </span>
+          <span className={`col col-direction direction--${item.direction}`}>
+            {item.direction === 'up' && '▲'}
+            {item.direction === 'down' && '▼'}
+            {item.direction === 'same' && '—'}
           </span>
           <span className="col col-updated">
             {new Date(item.updatedAt).toLocaleTimeString()}
