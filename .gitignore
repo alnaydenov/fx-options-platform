@@ -1,6 +1,8 @@
 # .NET
 server/bin/
 server/obj/
+server.tests/bin/
+server.tests/obj/
 *.user
 *.suo
 
