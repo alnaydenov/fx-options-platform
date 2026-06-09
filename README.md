@@ -10,6 +10,14 @@ A real-time FX options pricing dashboard built with **React + TypeScript** on th
 
 - [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [Node.js 18+](https://nodejs.org/)
+- [Git](https://git-scm.com/)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/<your-username>/fx-options-platform.git
+cd fx-options-platform
+```
 
 ### Run the Server
 
@@ -29,6 +37,13 @@ npm run dev
 ```
 
 Open `http://localhost:5173` in your browser. Vite proxies `/api` and `/ws` requests to the .NET server automatically.
+
+### Run the Tests
+
+```bash
+cd server.tests
+dotnet test
+```
 
 ---
 
