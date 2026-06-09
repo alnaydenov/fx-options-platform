@@ -31,20 +31,22 @@ export function usePriceStream(
         deltaMap.set(d[0], d);
       }
 
+      // Snapshot old prices before the state update so the comparison
+      // is stable even if React invokes the updater more than once (StrictMode).
+      const oldPrices = new Map(pricesRef.current);
+
       // Merge deltas into existing items, preserving original array order
       setItems((prev) =>
         prev.map((item) => {
           const delta = deltaMap.get(item.id);
-          if (!delta) return { ...item, direction: 'same' as PriceDirection };
+          if (!delta) return item; // no update — keep previous direction
 
           const [, newPrice, timestamp] = delta;
-          const oldPrice = pricesRef.current.get(item.id) ?? item.price;
+          const oldPrice = oldPrices.get(item.id) ?? item.price;
 
           let direction: PriceDirection = 'same';
           if (newPrice > oldPrice) direction = 'up';
           else if (newPrice < oldPrice) direction = 'down';
-
-          pricesRef.current.set(item.id, newPrice);
 
           return {
             ...item,
@@ -54,6 +56,12 @@ export function usePriceStream(
           };
         })
       );
+
+      // Update the price ref outside the updater to avoid StrictMode issues
+      for (const [id, , ] of deltas) {
+        const delta = deltaMap.get(id);
+        if (delta) pricesRef.current.set(id, delta[1]);
+      }
     };
 
     ws.onopen = () => setSubscribed(true);
