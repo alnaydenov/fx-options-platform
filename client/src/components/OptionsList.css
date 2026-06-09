@@ -1,0 +1,76 @@
+.options-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.options-header {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 140px;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.options-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 140px;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  transition: background 0.1s ease;
+}
+
+.options-row:last-child {
+  border-bottom: none;
+}
+
+.options-row:hover {
+  background: var(--bg-row-hover);
+}
+
+.col-price {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 500;
+}
+
+.col-direction {
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.price--up {
+  color: var(--price-up);
+}
+
+.price--down {
+  color: var(--price-down);
+}
+
+.price--same {
+  color: var(--text-primary);
+}
+
+.direction--up {
+  color: var(--price-up);
+}
+
+.direction--down {
+  color: var(--price-down);
+}
+
+.direction--same {
+  color: var(--price-same);
+}
+
+.col-updated {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}

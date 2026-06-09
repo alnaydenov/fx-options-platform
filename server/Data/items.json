@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "EUR/USD 1.1000C Jun25", "price": 0.0234, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 2, "name": "GBP/USD 1.2700P Jun25", "price": 0.0156, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 3, "name": "USD/JPY 155.00C Jul25", "price": 1.2340, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 4, "name": "AUD/USD 0.6600P Jun25", "price": 0.0089, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 5, "name": "EUR/GBP 0.8600C Jul25", "price": 0.0112, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 6, "name": "USD/CHF 0.9100P Jun25", "price": 0.0198, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 7, "name": "NZD/USD 0.6100C Aug25", "price": 0.0067, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 8, "name": "USD/CAD 1.3600P Jul25", "price": 0.0245, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 9, "name": "EUR/JPY 168.00C Jun25", "price": 2.1500, "updatedAt": "2025-06-09T12:00:00Z" },
+  { "id": 10, "name": "GBP/JPY 195.00P Jul25", "price": 3.4200, "updatedAt": "2025-06-09T12:00:00Z" }
+]
